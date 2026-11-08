@@ -17,7 +17,13 @@ pub struct NexAid;
 impl NexAid {
     // Guarda admin, token y vencimiento. Solo puede llamarse una vez.
     pub fn initialize(env: Env, admin: Address, token: Address, expiry: u64) {
-        todo!()
+        if env.storage().instance().has(&DataKey::Admin) {
+            panic!("already initialized");
+        }
+        admin.require_auth();
+        env.storage().instance().set(&DataKey::Admin, &admin);
+        env.storage().instance().set(&DataKey::Token, &token);
+        env.storage().instance().set(&DataKey::Expiry, &expiry);
     }
 
     // El donante envía tokens al contrato. Firma: donor.
@@ -45,3 +51,5 @@ impl NexAid {
         todo!()
     }
 }
+
+mod test;
