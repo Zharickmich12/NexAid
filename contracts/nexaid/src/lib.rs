@@ -33,7 +33,23 @@ impl NexAid {
 
     // Autoriza un comercio. Firma: admin.
     pub fn add_merchant(env: Env, merchant: Address) {
-        todo!()
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .expect("not initialized");
+        admin.require_auth();
+        env.storage()
+            .persistent()
+            .set(&DataKey::Merchant(merchant), &true);
+    }
+
+    // Consulta si un comercio está autorizado.
+    pub fn is_merchant(env: Env, merchant: Address) -> bool {
+        env.storage()
+            .persistent()
+            .get(&DataKey::Merchant(merchant))
+            .unwrap_or(false)
     }
 
     // Asigna ayuda a un beneficiario. Firma: admin.

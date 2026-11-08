@@ -25,3 +25,21 @@ fn initialize_twice_fails() {
     client.initialize(&admin, &token, &1000u64);
     client.initialize(&admin, &token, &1000u64);
 }
+
+#[test]
+fn add_merchant_works() {
+    let (env, client, admin, token) = setup();
+    client.initialize(&admin, &token, &1000u64);
+    let shop = Address::generate(&env);
+    assert!(!client.is_merchant(&shop));
+    client.add_merchant(&shop);
+    assert!(client.is_merchant(&shop));
+}
+
+#[test]
+#[should_panic]
+fn add_merchant_before_init_fails() {
+    let (env, client, _admin, _token) = setup();
+    let shop = Address::generate(&env);
+    client.add_merchant(&shop);
+}
