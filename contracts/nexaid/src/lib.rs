@@ -1,23 +1,47 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec};
+use soroban_sdk::{contract, contractimpl, contracttype, Address, Env};
 
-#[contract]
-pub struct Contract;
-
-// This is a sample contract. Replace this placeholder with your own contract logic.
-// A corresponding test example is available in `test.rs`.
-//
-// For comprehensive examples, visit <https://github.com/stellar/soroban-examples>.
-// The repository includes use cases for the Stellar ecosystem, such as data storage on
-// the blockchain, token swaps, liquidity pools, and more.
-//
-// Refer to the official documentation:
-// <https://developers.stellar.org/docs/build/smart-contracts/overview>.
-#[contractimpl]
-impl Contract {
-    pub fn hello(env: Env, to: String) -> Vec<String> {
-        vec![&env, String::from_str(&env, "Hello"), to]
-    }
+#[contracttype]
+pub enum DataKey {
+    Admin,
+    Token,
+    Expiry,
+    Merchant(Address),
+    Balance(Address),
 }
 
-mod test;
+#[contract]
+pub struct NexAid;
+
+#[contractimpl]
+impl NexAid {
+    // Guarda admin, token y vencimiento. Solo puede llamarse una vez.
+    pub fn initialize(env: Env, admin: Address, token: Address, expiry: u64) {
+        todo!()
+    }
+
+    // El donante envía tokens al contrato. Firma: donor.
+    pub fn donate(env: Env, donor: Address, amount: i128) {
+        todo!()
+    }
+
+    // Autoriza un comercio. Firma: admin.
+    pub fn add_merchant(env: Env, merchant: Address) {
+        todo!()
+    }
+
+    // Asigna ayuda a un beneficiario. Firma: admin.
+    pub fn assign_aid(env: Env, beneficiary: Address, amount: i128) {
+        todo!()
+    }
+
+    // El beneficiario paga a un comercio autorizado. Firma: beneficiary.
+    pub fn pay(env: Env, beneficiary: Address, merchant: Address, amount: i128) {
+        todo!()
+    }
+
+    // Si venció, el saldo vuelve al fondo. Puede llamarla cualquiera.
+    pub fn reclaim_expired(env: Env, beneficiary: Address) {
+        todo!()
+    }
+}
